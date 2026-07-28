@@ -1,0 +1,23 @@
+# Site Settings
+title: "Prof Carlos Correia"
+description: "Materiais de aula para meus alunos do SENAI Pato Branco/PR."
+url: "https://profcarlos-senai.github.io"
+baseurl: "" # Leave empty if your site is at the root domain, or use "/repository-name"
+
+# Theme Configuration
+theme: minima
+
+# Required Plugins for GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Minima Specific Configuration (Optional)
+minima:
+  # Choose a skin: classic, dark, solarized, solarized-dark (Minima v3+)
+  skin: classic 
+  
+  # Custom header navigation links
+  nav_pages:
+    - about.md
+    - contact.md
