@@ -9,8 +9,4 @@ theme: minima
 minima:
   skin: classic 
   header_pages:
-    - about.md
-    - contact.md
   nav_pages:
-    - about.md
-    - contact.md
