@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Prof Carlos Correia | Materiais de aula para meus alunos do SENAI Pato Branco/PR.</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Prof Carlos Correia" />
+<meta name="author" content="Carlos Correia" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Materiais de aula para meus alunos do SENAI Pato Branco/PR." />
+<meta name="twitter:description" property="og:description" content="Materiais de aula para meus alunos do SENAI Pato Branco/PR." />
+<link rel="canonical" href="http://localhost:4000/tutoriais/2026-07-29-calc.html" />
+<meta property="og:url" content="http://localhost:4000/tutoriais/2026-07-29-calc.html" />
+<meta property="og:site_name" content="Prof Carlos Correia" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Prof Carlos Correia" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Carlos Correia"},"description":"Materiais de aula para meus alunos do SENAI Pato Branco/PR.","headline":"Prof Carlos Correia","url":"http://localhost:4000/tutoriais/2026-07-29-calc.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Prof Carlos Correia" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Prof Carlos Correia</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="tutorial-2-estendendo-a-sua-primeira-api">Tutorial 2: Estendendo a sua primeira API</h1>
+
+<p>Seja bem-vindo de volta ao desenvolvimento Java com Spring Boot! Neste tutorial, vamos criar mais um controlador na nossa API REST que criamos ontem.</p>
+
+<h2 id="passo-1-baixe-seu-projeto-do-git">Passo 1: Baixe seu projeto do GIT</h2>
+
+<p>Vamos primeiro acessar o GitHub e baixar o nosso projeto:</p>
+<ul>
+  <li>Abra o Jetbrains IDEA</li>
+  <li>Clique no menu ☰ e escolha <code class="language-plaintext highlighter-rouge">New &gt; Project from version controlador</code></li>
+  <li>Coloque o endereço do seu repositório <code class="language-plaintext highlighter-rouge">github.com/seu-usuario/spring-28-jul</code>. Caso você não tenha salvo seu projeto ontem, baixe o projeto do professor em <code class="language-plaintext highlighter-rouge">https://github.com/profcarlos-senai/spring-28-jul</code></li>
+  <li>Clique em <code class="language-plaintext highlighter-rouge">Clone</code></li>
+</ul>
+
+<h2 id="passo-2-criando-a-calculadora-http">Passo 2: Criando a Calculadora HTTP</h2>
+
+<p>Agora crie um novo Controller chamado <code class="language-plaintext highlighter-rouge">CalcController.java</code> dentro da pasta <code class="language-plaintext highlighter-rouge">controle</code>.</p>
+
+<p>Nova anotação:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@RequestParam</code>: Captura parâmetros passados via Query String na URL (exemplo: <code class="language-plaintext highlighter-rouge">?n1=10&amp;n2=5</code>).</li>
+</ul>
+
+<p>Copie o código a seguir, que já implementa a operação de <strong>soma</strong>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestParam</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"calc"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalcController</span> <span class="o">{</span>
+
+    <span class="c1">// @RequestParam: Extrai os query params (?n1=X&amp;n2=Y) da URL</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"somar"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">somar</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="kt">double</span> <span class="n">n1</span><span class="o">,</span> <span class="nd">@RequestParam</span> <span class="kt">double</span> <span class="n">n2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">resultado</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="o">;</span>
+        <span class="k">return</span> <span class="s">"Resultado da Soma: "</span> <span class="o">+</span> <span class="n">resultado</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Teste no Navegador:</strong>
+Acesse: <code class="language-plaintext highlighter-rouge">http://localhost:8080/calc/somar?n1=10&amp;n2=5</code>
+<strong>Resultado esperado:</strong> <code class="language-plaintext highlighter-rouge">Resultado da Soma: 15.0</code></p>
+</blockquote>
+
+<hr />
+
+<h3 id="️-desafio-para-os-alunos">✏️ DESAFIO PARA OS ALUNOS:</h3>
+
+<p>Com base no método <code class="language-plaintext highlighter-rouge">somar</code>, crie sozinhos os outros três métodos dentro da classe <code class="language-plaintext highlighter-rouge">CalcController</code>:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">subtrair</code>: atenda no endpoint <code class="language-plaintext highlighter-rouge">/calc/subtrair?n1={n1}&amp;n2={n2}</code></li>
+  <li><code class="language-plaintext highlighter-rouge">multiplicar</code>: atenda no endpoint <code class="language-plaintext highlighter-rouge">/calc/multiplicar?n1={n1}&amp;n2={n2}</code></li>
+  <li><code class="language-plaintext highlighter-rouge">dividir</code>: atenda no endpoint <code class="language-plaintext highlighter-rouge">/calc/dividir?n1={n1}&amp;n2={n2}</code> <em>(Trate a divisão por zero caso ache necessário!)</em></li>
+</ol>
+
+<hr />
+
+<h3 id="não-esqueça-de-salvar-seu-projeto-no-git-e-enviar-pro-github">Não esqueça de salvar seu projeto no Git e enviar pro GitHub</h3>
+
+<p>Faça o commit do seu projeto. Entre no terminal do IDEA e digite</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Criei CalcController"</span>
+git push
+</code></pre></div></div>
+
+<p>Perceba que agora só precisa escrever <code class="language-plaintext highlighter-rouge">git push</code>. As opções <code class="language-plaintext highlighter-rouge">-u origin master</code> só precisa adicionar na primeira vez que faz o push.</p>
+
+<hr />
+
+<h2 id="passo-3-retornando-objetos-json-com-a-classe-pessoa">Passo 3: Retornando Objetos JSON com a Classe Pessoa</h2>
+
+<p>Em APIs REST modernas, é muito comum enviar e receber dados estruturados no formato JSON. O Spring Boot faz essa conversão de Objetos Java para JSON de forma totalmente automática!</p>
+
+<h3 id="1-criando-o-pacote-modelo-e-a-classe-pessoa">1. Criando o Pacote Modelo e a Classe Pessoa</h3>
+
+<p>Crie o pacote <code class="language-plaintext highlighter-rouge">modelo</code> dentro de <code class="language-plaintext highlighter-rouge">br.senai.meuprojeto</code>. Sua árvore de pastas agora deve ser a seguinte:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── java
+            └── br
+                └── senai
+                    └── meuprojeto
+                        ├── controle
+                        │   ├── BananaController.java
+                        │   └── CalcController.java
+                        ├── modelo
+                        │   └── Pessoa.java
+                        └── MeuprojetoApplication.java
+
+</code></pre></div></div>
+
+<p>Dentro de <code class="language-plaintext highlighter-rouge">modelo</code>, crie o arquivo <code class="language-plaintext highlighter-rouge">Pessoa.java</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.modelo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.math.BigDecimal</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Pessoa</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">;</span>
+
+    <span class="c1">// Construtor completo</span>
+    <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">(</span><span class="nc">String</span> <span class="n">nome</span><span class="o">,</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">,</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">,</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dataContrato</span> <span class="o">=</span> <span class="n">dataContrato</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">salario</span> <span class="o">=</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Getters e Setters</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getNome</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNome</span><span class="o">(</span><span class="nc">String</span> <span class="n">nome</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getTelefone</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTelefone</span><span class="o">(</span><span class="nc">String</span> <span class="n">telefone</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getIdade</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setIdade</span><span class="o">(</span><span class="kt">int</span> <span class="n">idade</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">LocalDate</span> <span class="nf">getDataContrato</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDataContrato</span><span class="o">(</span><span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dataContrato</span> <span class="o">=</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">BigDecimal</span> <span class="nf">getSalario</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSalario</span><span class="o">(</span><span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">salario</span> <span class="o">=</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="2-criando-o-pessoacontroller">2. Criando o PessoaController</h3>
+
+<p>Agora, crie o arquivo <code class="language-plaintext highlighter-rouge">PessoaController.java</code> dentro da pasta <code class="language-plaintext highlighter-rouge">controle</code>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.senai.meuprojeto.modelo.Pessoa</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.math.BigDecimal</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"pessoa"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PessoaController</span> <span class="o">{</span>
+
+    <span class="nd">@GetMapping</span>
+    <span class="kd">public</span> <span class="nc">Pessoa</span> <span class="nf">getPessoa</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Instancia um objeto Pessoa populado com dados fictícios</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Pessoa</span><span class="o">(</span>
+                <span class="s">"Carlos Eduardo"</span><span class="o">,</span>
+                <span class="s">"(41) 99999-8888"</span><span class="o">,</span>
+                <span class="mi">28</span><span class="o">,</span>
+                <span class="nc">LocalDate</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">2023</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">15</span><span class="o">),</span>
+                <span class="k">new</span> <span class="nf">BigDecimal</span><span class="o">(</span><span class="s">"4500.50"</span><span class="o">)</span>
+        <span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="teste-final-no-navegador">Teste Final no Navegador</h3>
+
+<p>Execute novamente a aplicação e acesse o endereço no seu navegador:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://localhost:8080/pessoa</code></p>
+
+<p><strong>Resultado em JSON retornado pelo Spring Boot:</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carlos Eduardo"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"telefone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(41) 99999-8888"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idade"</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"dataContrato"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-03-15"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"salario"</span><span class="p">:</span><span class="w"> </span><span class="mf">4500.50</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="finalizado-agora-vamos-salvar-no-git-e-enviar-ao-github">Finalizado! Agora vamos salvar no Git e enviar ao GitHub</h2>
+
+<p>Faça o commit do seu projeto. Entre no terminal do IDEA e digite</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Criei Pessoa e PessoaController"</span>
+git push
+</code></pre></div></div>
+
+<p>Agora seu projeto está semiacabado. Amanhã vamos conectar a classe Pessoa ao banco de dados.</p>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Prof Carlos Correia</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Carlos Correia</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Materiais de aula para meus alunos do SENAI Pato Branco/PR.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

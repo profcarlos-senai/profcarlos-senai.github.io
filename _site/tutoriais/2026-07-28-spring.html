@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Prof Carlos Correia | Materiais de aula para meus alunos do SENAI Pato Branco/PR.</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Prof Carlos Correia" />
+<meta name="author" content="Carlos Correia" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Materiais de aula para meus alunos do SENAI Pato Branco/PR." />
+<meta name="twitter:description" property="og:description" content="Materiais de aula para meus alunos do SENAI Pato Branco/PR." />
+<link rel="canonical" href="http://localhost:4000/tutoriais/2026-07-28-spring.html" />
+<meta property="og:url" content="http://localhost:4000/tutoriais/2026-07-28-spring.html" />
+<meta property="og:site_name" content="Prof Carlos Correia" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Prof Carlos Correia" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Carlos Correia"},"description":"Materiais de aula para meus alunos do SENAI Pato Branco/PR.","headline":"Prof Carlos Correia","url":"http://localhost:4000/tutoriais/2026-07-28-spring.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Prof Carlos Correia" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Prof Carlos Correia</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="tutorial-1-criando-sua-primeira-aplicação-spring-boot">Tutorial 1: Criando sua Primeira Aplicação Spring Boot</h1>
+
+<p>Seja bem-vindo ao desenvolvimento Java com Spring Boot! Neste tutorial prático, você vai aprender a criar do zero uma aplicação web completa, entendendo a estrutura do projeto, criação de Controllers e APIs REST.</p>
+
+<hr />
+
+<h2 id="passo-1-gerando-o-projeto-no-spring-initializr">Passo 1: Gerando o Projeto no Spring Initializr</h2>
+
+<ol>
+  <li>Acesse o site oficial: <a href="https://start.spring.io/">start.spring.io</a></li>
+  <li>Preencha as configurações do projeto conforme abaixo:
+    <ul>
+      <li><strong>Project:</strong> Maven</li>
+      <li><strong>Language:</strong> Java</li>
+      <li><strong>Spring Boot:</strong> 4.1.0</li>
+      <li><strong>Group:</strong> <code class="language-plaintext highlighter-rouge">br.senai</code></li>
+      <li><strong>Artifact:</strong> <code class="language-plaintext highlighter-rouge">meuprojeto</code></li>
+      <li><strong>Name:</strong> <code class="language-plaintext highlighter-rouge">meuprojeto</code></li>
+      <li><strong>Package name:</strong> <code class="language-plaintext highlighter-rouge">br.senai.meuprojeto</code></li>
+      <li><strong>Packaging:</strong> Jar</li>
+      <li><strong>Java:</strong> 17</li>
+      <li><strong>Dependencies:</strong> Adicione a dependência <strong>Spring Web</strong> (Web).</li>
+    </ul>
+  </li>
+  <li>Clique no botão <strong>GENERATE</strong> para baixar o arquivo <code class="language-plaintext highlighter-rouge">.zip</code>.</li>
+</ol>
+
+<hr />
+
+<h2 id="passo-2-extraindo-e-abrindo-no-intellij-idea">Passo 2: Extraindo e Abrindo no IntelliJ IDEA</h2>
+
+<ol>
+  <li>Descompacte o arquivo baixado na pasta:
+<code class="language-plaintext highlighter-rouge">/users/aluno/ideaprojects</code></li>
+  <li>Abra o <strong>IntelliJ IDEA</strong>.</li>
+  <li>Clique em <strong>Open</strong> e selecione a pasta <code class="language-plaintext highlighter-rouge">/users/aluno/ideaprojects/meuprojeto</code>.</li>
+  <li>Aguarde o Maven baixar as dependências e indexar o projeto.</li>
+</ol>
+
+<hr />
+
+<h2 id="passo-3-entendendo-a-estrutura-do-projeto">Passo 3: Entendendo a Estrutura do Projeto</h2>
+
+<p>Ao abrir o projeto, você verá a seguinte estrutura de pastas e arquivos no diretório:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+├── pom.xml
+└── src
+    └── main
+        ├── java
+        │   └── br
+        │       └── senai
+        │           └── meuprojeto
+        │               └── MeuprojetoApplication.java
+        └── resources
+            ├── application.properties
+            ├── static
+            └── templates
+
+</code></pre></div></div>
+
+<h3 id="principais-arquivos">Principais Arquivos:</h3>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">pom.xml</code></strong>: Arquivo de configuração do Maven. Ele gerencia as dependências do projeto (como o Spring Web) e a versão do Java e do Framework.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">application.properties</code></strong>: Arquivo onde definimos configurações da aplicação (porta do servidor, conexões com banco de dados, etc.).</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">MeuprojetoApplication.java</code></strong>: A classe principal que contém o método <code class="language-plaintext highlighter-rouge">main()</code> e liga o servidor Spring Boot.</li>
+</ul>
+
+<hr />
+
+<h2 id="passo-4-criando-os-endpoints-de-banana">Passo 4: Criando os Endpoints de Banana</h2>
+
+<p>Vamos organizar nosso código criando pacotes (packages) para cada tipo de classe. Primeiramente, crie o pacote <code class="language-plaintext highlighter-rouge">controle</code> dentro de <code class="language-plaintext highlighter-rouge">br.senai.meuprojeto</code>.</p>
+
+<p>Sua estrutura de pastas deve ficar assim:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── java
+            └── br
+                └── senai
+                    └── meuprojeto
+                        ├── controle
+                        └── MeuprojetoApplication.java
+
+</code></pre></div></div>
+
+<p>Dentro de <code class="language-plaintext highlighter-rouge">controle</code>, crie a classe <code class="language-plaintext highlighter-rouge">BananaController.java</code>.</p>
+
+<hr />
+
+<h3 id="endpoint-1-retornando-a-palavra-banana">Endpoint 1: Retornando a palavra “banana”</h3>
+
+<p>Vamos criar o primeiro endpoint que escuta requisições na URL <code class="language-plaintext highlighter-rouge">/banana</code>.</p>
+
+<p>Explicação das anotações:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@RestController</code>: Informa ao Spring que esta classe é um controlador de rotas web e que os retornos dos métodos devem ser enviados diretamente no corpo da resposta HTTP (JSON ou Texto).</li>
+  <li><code class="language-plaintext highlighter-rouge">@GetMapping</code>: Mapeia requisições HTTP do tipo GET para o caminho especificado.</li>
+</ul>
+
+<p>Crie o arquivo <code class="language-plaintext highlighter-rouge">BananaController.java</code> com o código abaixo:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="c1">// @RestController: Marca a classe como um controlador REST</span>
+<span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BananaController</span> <span class="o">{</span>
+
+    <span class="c1">// @GetMapping: Define a rota de acesso via requisição HTTP GET</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBanana</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Teste no Navegador:</strong>
+Execute o projeto na classe <code class="language-plaintext highlighter-rouge">MeuprojetoApplication.java</code>. Abra o navegador e acesse:
+<code class="language-plaintext highlighter-rouge">http://localhost:8080/banana</code>
+<strong>Resultado esperado:</strong> A palavra <code class="language-plaintext highlighter-rouge">banana</code> exibida na tela.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="endpoint-2-multiplicando-a-banana-por-n-vezes">Endpoint 2: Multiplicando a banana por <code class="language-plaintext highlighter-rouge">n</code> vezes</h3>
+
+<p>Agora vamos evoluir o controlador adicionando um caminho dinâmico <code class="language-plaintext highlighter-rouge">/banana/{n}</code>, onde <code class="language-plaintext highlighter-rouge">{n}</code> é um parâmetro numérico passado pela URL.</p>
+
+<p>Nova anotação:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@PathVariable</code>: Extrai variáveis informadas diretamente na URL e as vincula aos parâmetros do método Java.</li>
+</ul>
+
+<p>Atualize o arquivo <code class="language-plaintext highlighter-rouge">BananaController.java</code> adicionando o novo método:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.PathVariable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BananaController</span> <span class="o">{</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBanana</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// @PathVariable: Captura o valor informado em {n} na URL e passa para a variável 'n'</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana/{n}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBananaMultiplicada</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana "</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">)).</span><span class="na">trim</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Teste no Navegador:</strong>
+Acesse: <code class="language-plaintext highlighter-rouge">http://localhost:8080/banana/5</code>
+<strong>Resultado esperado:</strong> <code class="language-plaintext highlighter-rouge">banana banana banana banana banana</code></p>
+</blockquote>
+
+<hr />
+
+<h3 id="endpoint-3-retornando-a-imagem-da-banana">Endpoint 3: Retornando a imagem da banana</h3>
+
+<p>Agora vamos criar o endpoint <code class="language-plaintext highlighter-rouge">/banana/img</code> que redirecionará o usuário para a imagem de uma banana.</p>
+
+<p>Nova anotação e classe:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">RedirectView</code>: Classe do Spring Web usada para redirecionar a requisição HTTP para uma URL externa ou interna.</li>
+</ul>
+
+<p>Adicione o método de imagem ao arquivo <code class="language-plaintext highlighter-rouge">BananaController.java</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.PathVariable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.view.RedirectView</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BananaController</span> <span class="o">{</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBanana</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana/{n}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBananaMultiplicada</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana "</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">)).</span><span class="na">trim</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="c1">// RedirectView: Redireciona a chamada HTTP para outro endereço web</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"banana/img"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">RedirectView</span> <span class="nf">getBananaImg</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">urlImagem</span> <span class="o">=</span> <span class="s">"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Bananas_%28Alabama_Extension%29.jpg/1920px-Bananas_%28Alabama_Extension%29.jpg?_=20210330154646"</span><span class="o">;</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">RedirectView</span><span class="o">(</span><span class="n">urlImagem</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Teste no Navegador:</strong>
+Acesse: <code class="language-plaintext highlighter-rouge">http://localhost:8080/banana/img</code>
+<strong>Resultado esperado:</strong> O navegador será redirecionado para a foto das bananas na Wikipedia.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="otimizando-o-controller-com-requestmapping">Otimizando o Controller com <code class="language-plaintext highlighter-rouge">@RequestMapping</code></h3>
+
+<p>Note que todos os métodos acima começam com a rota <code class="language-plaintext highlighter-rouge">/banana</code>. Podemos refatorar a classe definindo o caminho base usando a anotação <code class="language-plaintext highlighter-rouge">@RequestMapping</code> na classe, evitando repetição de código.</p>
+
+<p>Nova anotação:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@RequestMapping</code>: Mapeia um prefixo de URL para todos os métodos de um determinado Controller.</li>
+</ul>
+
+<p>Substitua todo o conteúdo de <code class="language-plaintext highlighter-rouge">BananaController.java</code> por esta versão otimizada:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.PathVariable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.view.RedirectView</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="c1">// @RequestMapping: Define o prefixo base '/banana' para todas as rotas desta classe</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"banana"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BananaController</span> <span class="o">{</span>
+
+    <span class="c1">// Responde a: GET /banana</span>
+    <span class="nd">@GetMapping</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBanana</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Responde a: GET /banana/{n}</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"{n}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getBananaMultiplicada</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"banana "</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">)).</span><span class="na">trim</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Responde a: GET /banana/img</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"img"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">RedirectView</span> <span class="nf">getBananaImg</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">urlImagem</span> <span class="o">=</span> <span class="s">"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Bananas_%28Alabama_Extension%29.jpg/1920px-Bananas_%28Alabama_Extension%29.jpg?_=20210330154646"</span><span class="o">;</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">RedirectView</span><span class="o">(</span><span class="n">urlImagem</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>Parabéns! Você acabou de construir sua primeira API REST funcional com Spring Boot!</p>
+
+<h2 id="que-tal-salvar-esse-projeto-no-github">Que tal salvar esse projeto no GitHub?</h2>
+
+<p>Agora que você concluiu o desenvolvimento e testou sua aplicação, é hora de salvar seu código na nuvem criando um repositório no <strong>GitHub</strong>.</p>
+
+<h3 id="1-criando-um-novo-repositório-no-github">1. Criando um Novo Repositório no GitHub</h3>
+
+<ol>
+  <li>Acesse o site do <a href="https://github.com/">GitHub</a> e faça login em sua conta.</li>
+  <li>Clique no botão <strong>”+”</strong> no canto superior direito e selecione <strong>New repository</strong> (ou clique no botão verde <strong>New</strong>).</li>
+  <li>No campo <strong>Repository name</strong>, digite o nome <code class="language-plaintext highlighter-rouge">spring-28-jul</code> ou qualquer outro que você prefira</li>
+  <li>Mantenha o repositório como <strong>Public</strong> ou <strong>Private</strong> (conforme preferir).</li>
+  <li><strong>ATENÇÃO:</strong> Deixe desmarcadas as opções de adicionar <em>README</em>, <em>.gitignore</em> ou <em>license</em>, pois já criamos a estrutura localmente e o repositório deve ser criado inteiramente <strong>vazio</strong>.</li>
+  <li>Clique em <strong>Create repository</strong>.</li>
+</ol>
+
+<hr />
+
+<h3 id="2-associando-o-repositório-remoto-remote-origin">2. Associando o Repositório Remoto (Remote Origin)</h3>
+
+<p>Após criar o repositório, o GitHub exibirá a página do projeto com a URL do seu repositório (exemplo: <code class="language-plaintext highlighter-rouge">https://github.com/seu-usuario/spring-28-jul.git</code>).</p>
+
+<p>Abra o terminal integrado do seu IntelliJ IDEA e execute o comando abaixo para vincular seu repositório local ao repositório remoto no GitHub (substitua <code class="language-plaintext highlighter-rouge">seu-usuario</code> pelo seu nome de usuário do GitHub e <code class="language-plaintext highlighter-rouge">spring-28-jul</code> pelo nome que você criou):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote add origin <span class="o">[</span>https://github.com/seu-usuario/spring-28-jul.git]<span class="o">(</span>https://github.com/seu-usuario/spring-28-jul.git<span class="o">)</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Garantindo o Commit Final</li>
+</ol>
+
+<p>Para ter certeza de que todas as últimas alterações estão salvas antes do envio, execute:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"projeto spring boot concluido"</span>
+</code></pre></div></div>
+
+<p>(Se o terminal informar que não há nada para commitar, significa que você já fez o commit de todas as alterações anteriormente. Pode prosseguir!)</p>
+
+<ol>
+  <li>Enviando o Código para o GitHub (Push)</li>
+</ol>
+
+<p>Defina a branch principal como main (opcional, mas o github prefere esse nome) e envie o código para o repositório remoto executando os comandos:
+Bash</p>
+
+<p>git branch -M main
+git push -u origin main</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📌 Verificação Final:
+
+Atualize a página do seu repositório no GitHub (https://github.com/seu-usuario/spring-28-jul). Todo o código do projeto, histórico de commits e a estrutura das pastas agora estarão salvos na sua conta!
+</code></pre></div></div>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Prof Carlos Correia</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Carlos Correia</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Materiais de aula para meus alunos do SENAI Pato Branco/PR.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
