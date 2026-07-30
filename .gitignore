@@ -1,0 +1,30 @@
+# Jekyll build output
+_site/
+
+# Jekyll caches
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundler
+.bundle/
+vendor/bundle/
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Logs and temporary files
+.log
+.tmp
+
+# Ruby-specific
+*.gem
+Gemfile.lock
