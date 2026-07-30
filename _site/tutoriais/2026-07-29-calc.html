@@ -111,6 +111,7 @@ git push
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Pessoa</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">;</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">;</span>
@@ -118,7 +119,7 @@ git push
     <span class="kd">private</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">;</span>
 
     <span class="c1">// Construtor completo</span>
-    <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">(</span><span class="nc">String</span> <span class="n">nome</span><span class="o">,</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">,</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">,</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">,</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">,</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">,</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">,</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
@@ -126,7 +127,15 @@ git push
         <span class="k">this</span><span class="o">.</span><span class="na">salario</span> <span class="o">=</span> <span class="n">salario</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="c1">// Getters e Setters</span>
+    <span class="c1">// Getters e </span>
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getId</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
     <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getNome</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">nome</span><span class="o">;</span>
     <span class="o">}</span>
@@ -194,6 +203,7 @@ git push
     <span class="kd">public</span> <span class="nc">Pessoa</span> <span class="nf">getPessoa</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// Instancia um objeto Pessoa populado com dados fictícios</span>
         <span class="k">return</span> <span class="k">new</span> <span class="nf">Pessoa</span><span class="o">(</span>
+                <span class="mi">1</span><span class="o">,</span>
                 <span class="s">"Carlos Eduardo"</span><span class="o">,</span>
                 <span class="s">"(41) 99999-8888"</span><span class="o">,</span>
                 <span class="mi">28</span><span class="o">,</span>
