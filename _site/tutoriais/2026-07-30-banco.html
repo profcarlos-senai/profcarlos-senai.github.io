@@ -44,6 +44,11 @@
 
 <p>Abra o arquivo <code class="language-plaintext highlighter-rouge">pom.xml</code> e adicione as dependências do <strong>Spring Data JPA</strong> e do driver do <strong>PostgreSQL</strong> dentro do bloco <code class="language-plaintext highlighter-rouge">&lt;dependencies&gt;</code>:</p>
 
+<blockquote>
+  <h3 id="importante">IMPORTANTE</h3>
+  <p>Você deve adicionar esse bloco de código entre <code class="language-plaintext highlighter-rouge">&lt;dependendies&gt;</code> e <code class="language-plaintext highlighter-rouge">&lt;/dependencies&gt;</code> no seu <code class="language-plaintext highlighter-rouge">pom.xml</code></p>
+</blockquote>
+
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Spring Data JPA --&gt;</span>
 <span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
@@ -59,7 +64,7 @@
 
 </code></pre></div></div>
 
-<p>Depois de salvar o arquivo <code class="language-plaintext highlighter-rouge">pom.xml</code> você precisa clicar no botãozinho do maven (uma letra M com duas flechinhas que aparece acima e a direita). Isso vai baixar as dependências novas que você colocou.</p>
+<p>Depois de salvar o arquivo <code class="language-plaintext highlighter-rouge">pom.xml</code> você precisa clicar no botãozinho do maven <img src="image.png" alt="botão do maven" /> que aparece acima e a direita. Isso vai baixar as dependências novas que você colocou.</p>
 
 <hr />
 
@@ -239,6 +244,10 @@
 <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'Lucas Santos'</span><span class="p">,</span> <span class="s1">'(41) 95555-4444'</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">'2025-02-14'</span><span class="p">,</span> <span class="mi">2900</span><span class="p">.</span><span class="mi">75</span><span class="p">);</span>
 
 </code></pre></div></div>
+
+<h3 id="se-quiser-confira-lá-no-postgres">Se quiser, confira lá no Postgres</h3>
+
+<p>Depois de criar data.sql, rode o projeto e digite a query <code class="language-plaintext highlighter-rouge">SELECT * FROM PESSOA;</code> de dentro do PgAdmin4 para ver se funcionou</p>
 
 <hr />
 
