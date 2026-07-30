@@ -47,7 +47,7 @@
 
 <blockquote>
   <p><strong>Teste no Navegador:</strong>
-Acesse: <code class="language-plaintext highlighter-rouge">http://localhost:8080/calc/somar?n1=10&amp;n2=5</code>
+Acesse: <a href="http://localhost:8080/calc/somar?n1=10&amp;n2=5" target="_blank" rel="noreferrer noopener">http://localhost:8080/calc/somar?n1=10&amp;n2=5</a><br />
 <strong>Resultado esperado:</strong> <code class="language-plaintext highlighter-rouge">Resultado da Soma: 15.0</code></p>
 </blockquote>
 
@@ -67,7 +67,7 @@ Acesse: <code class="language-plaintext highlighter-rouge">http://localhost:8080
 
 <h3 id="não-esqueça-de-salvar-seu-projeto-no-git-e-enviar-pro-github">Não esqueça de salvar seu projeto no Git e enviar pro GitHub</h3>
 
-<p>Faça o commit do seu projeto. Entre no terminal do IDEA e digite</p>
+<p>Faça o commit do seu projeto. Entre no terminal do IDEA (Alt + F12) ou <img src="terminal.png" alt="botão do terminal" /> e digite</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
 git commit <span class="nt">-m</span> <span class="s2">"Criei CalcController"</span>
@@ -120,6 +120,7 @@ git push
 
     <span class="c1">// Construtor completo</span>
     <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">,</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">,</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">,</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">,</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
@@ -221,7 +222,7 @@ git push
 
 <p>Execute novamente a aplicação e acesse o endereço no seu navegador:</p>
 
-<p><code class="language-plaintext highlighter-rouge">http://localhost:8080/pessoa</code></p>
+<p><a href="http://localhost:8080/pessoa" target="_blank" rel="noreferrer noopener">http://localhost:8080/pessoa</a></p>
 
 <p><strong>Resultado em JSON retornado pelo Spring Boot:</strong></p>
 
@@ -239,7 +240,7 @@ git push
 
 <h2 id="finalizado-agora-vamos-salvar-no-git-e-enviar-ao-github">Finalizado! Agora vamos salvar no Git e enviar ao GitHub</h2>
 
-<p>Faça o commit do seu projeto. Entre no terminal do IDEA e digite</p>
+<p>Faça o commit do seu projeto. Entre no terminal do IDEA (Alt + F12) ou <img src="terminal.png" alt="botão do terminal" /> e digite</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
 git commit <span class="nt">-m</span> <span class="s2">"Criei Pessoa e PessoaController"</span>
