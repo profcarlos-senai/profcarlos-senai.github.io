@@ -1,0 +1,472 @@
+<h1 id="tutorial-3-conexão-com-o-banco-de-dados-e-crud">Tutorial 3: Conexão com o banco de dados e CRUD</h1>
+
+<p>Seja bem-vindo ao terceiro tutorial! Hoje vamos conectar nossa aplicação ao banco de dados relacional <strong>PostgreSQL</strong>, transformar a classe <code class="language-plaintext highlighter-rouge">Pessoa</code> em uma entidade JPA com chave primária auto-incrementável (<code class="language-plaintext highlighter-rouge">SERIAL</code>), popular a tabela usando <code class="language-plaintext highlighter-rouge">data.sql</code> e criar os endpoints do CRUD um a um.</p>
+
+<p>CRUD significa Criar, Recuperar, atUalizar e Deletar</p>
+
+<hr />
+
+<h2 id="-visão-geral-da-estrutura-de-arquivos-do-projeto">📂 Visão Geral da Estrutura de Arquivos do Projeto</h2>
+
+<p>Para ajudar na localização dos arquivos que vamos criar e modificar neste tutorial, observe a árvore de diretórios do projeto abaixo:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+├── pom.xml                                  &lt;-- MODIFICADO (Passo 1: Dependências JPA/Postgres)
+└── src
+    └── main
+        ├── java
+        │   └── br
+        │       └── senai
+        │           └── meuprojeto
+        │               ├── controle
+        │               │   ├── BananaController.java
+        │               │   ├── CalcController.java
+        │               │   └── PessoaController.java &lt;-- MODIFICADO (Endpoints do CRUD)
+        │               ├── modelo
+        │               │   └── Pessoa.java           &lt;-- MODIFICADO (Passo 3: Mapeamento da Entidade)
+        │               ├── repositorio
+        │               │   └── PessoaRepository.java &lt;-- CRIADO (Passo 5: Interface Spring Data JPA)
+        │               └── MeuprojetoApplication.java
+        └── resources
+            ├── application.properties               &lt;-- MODIFICADO (Passo 2: Configurações de Conexão)
+            └── data.sql                             &lt;-- CRIADO (Passo 4: Script SQL para popular o banco)
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="passo-1-configurando-as-dependências-no-pomxml">Passo 1: Configurando as Dependências no <code class="language-plaintext highlighter-rouge">pom.xml</code></h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── pom.xml  &lt;-- Adicionar as novas dependências aqui
+
+</code></pre></div></div>
+
+<p>Abra o arquivo <code class="language-plaintext highlighter-rouge">pom.xml</code> e adicione as dependências do <strong>Spring Data JPA</strong> e do driver do <strong>PostgreSQL</strong> dentro do bloco <code class="language-plaintext highlighter-rouge">&lt;dependencies&gt;</code>:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Spring Data JPA --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="c">&lt;!-- Driver PostgreSQL --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.postgresql<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>postgresql<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="passo-2-configurando-o-applicationproperties">Passo 2: Configurando o <code class="language-plaintext highlighter-rouge">application.properties</code></h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── resources
+            └── application.properties  &lt;-- Configurar banco de dados aqui
+
+</code></pre></div></div>
+
+<p>Abra o arquivo <code class="language-plaintext highlighter-rouge">src/main/resources/application.properties</code> e adicione os dados de conexão com o PostgreSQL em <code class="language-plaintext highlighter-rouge">localhost</code>, usuário <code class="language-plaintext highlighter-rouge">postgres</code>, senha <code class="language-plaintext highlighter-rouge">1234</code> e banco <code class="language-plaintext highlighter-rouge">postgres</code>:</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Conexão com PostgreSQL
+</span><span class="py">spring.datasource.url</span><span class="p">=</span><span class="s">jdbc:postgresql://localhost:5432/postgres</span>
+<span class="py">spring.datasource.username</span><span class="p">=</span><span class="s">postgres</span>
+<span class="py">spring.datasource.password</span><span class="p">=</span><span class="s">1234</span>
+<span class="py">spring.datasource.driver-class-name</span><span class="p">=</span><span class="s">org.postgresql.Driver</span>
+
+<span class="c"># Modo DDL update e visualização de SQL
+</span><span class="py">spring.jpa.hibernate.ddl-auto</span><span class="p">=</span><span class="s">update</span>
+<span class="py">spring.jpa.show-sql</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.jpa.properties.hibernate.format_sql</span><span class="p">=</span><span class="s">true</span>
+
+<span class="c"># Habilita execução automática do data.sql
+</span><span class="py">spring.jpa.defer-datasource-initialization</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.sql.init.mode</span><span class="p">=</span><span class="s">always</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="passo-3-transformando-a-classe-pessoa-em-uma-entidade">Passo 3: Transformando a Classe <code class="language-plaintext highlighter-rouge">Pessoa</code> em uma Entidade</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── java
+            └── br
+                └── senai
+                    └── meuprojeto
+                        └── modelo
+                            └── Pessoa.java  &lt;-- Mapear como Entidade JPA aqui
+
+</code></pre></div></div>
+
+<p>Precisamos mapear a classe <code class="language-plaintext highlighter-rouge">Pessoa</code> para virar uma tabela no PostgreSQL com chave primária (<code class="language-plaintext highlighter-rouge">id</code>) auto-incrementável.</p>
+
+<p>Explicação das novas anotações:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@Entity</code>: Informa ao Spring JPA que esta classe é uma tabela no banco de dados.</li>
+  <li><code class="language-plaintext highlighter-rouge">@Table(name = "pessoa")</code>: Define explicitamente o nome da tabela no banco.</li>
+  <li><code class="language-plaintext highlighter-rouge">@Id</code>: Marca o atributo como chave primária da tabela.</li>
+  <li><code class="language-plaintext highlighter-rouge">@GeneratedValue(strategy = GenerationType.IDENTITY)</code>: Define que a geração da chave primária é gerenciada pelo banco de dados no modo autoincremento (<code class="language-plaintext highlighter-rouge">SERIAL</code> no PostgreSQL).</li>
+</ul>
+
+<p>Atualize o arquivo <code class="language-plaintext highlighter-rouge">src/main/java/br/senai/meuprojeto/modelo/Pessoa.java</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.modelo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">jakarta.persistence.Entity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">jakarta.persistence.GeneratedValue</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">jakarta.persistence.GenerationType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">jakarta.persistence.Id</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">jakarta.persistence.Table</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.math.BigDecimal</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+
+<span class="nd">@Entity</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"pessoa"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Pessoa</span> <span class="o">{</span>
+
+    <span class="nd">@Id</span>
+    <span class="nd">@GeneratedValue</span><span class="o">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="nc">GenerationType</span><span class="o">.</span><span class="na">IDENTITY</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">;</span>
+
+    <span class="c1">// Construtor vazio (obrigatório para o JPA)</span>
+    <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Construtor completo</span>
+    <span class="kd">public</span> <span class="nf">Pessoa</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nc">String</span> <span class="n">nome</span><span class="o">,</span> <span class="nc">String</span> <span class="n">telefone</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idade</span><span class="o">,</span> <span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">,</span> <span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dataContrato</span> <span class="o">=</span> <span class="n">dataContrato</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">salario</span> <span class="o">=</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Getters e Setters</span>
+    <span class="kd">public</span> <span class="nc">Long</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getNome</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNome</span><span class="o">(</span><span class="nc">String</span> <span class="n">nome</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nome</span> <span class="o">=</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getTelefone</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTelefone</span><span class="o">(</span><span class="nc">String</span> <span class="n">telefone</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">telefone</span> <span class="o">=</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getIdade</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setIdade</span><span class="o">(</span><span class="kt">int</span> <span class="n">idade</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">idade</span> <span class="o">=</span> <span class="n">idade</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">LocalDate</span> <span class="nf">getDataContrato</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDataContrato</span><span class="o">(</span><span class="nc">LocalDate</span> <span class="n">dataContrato</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dataContrato</span> <span class="o">=</span> <span class="n">dataContrato</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">BigDecimal</span> <span class="nf">getSalario</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSalario</span><span class="o">(</span><span class="nc">BigDecimal</span> <span class="n">salario</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">salario</span> <span class="o">=</span> <span class="n">salario</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="passo-4-criando-o-datasql-com-5-pessoas">Passo 4: Criando o <code class="language-plaintext highlighter-rouge">data.sql</code> com 5 Pessoas</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── resources
+            └── data.sql  &lt;-- Criar novo arquivo SQL aqui
+
+</code></pre></div></div>
+
+<p>Crie o arquivo <code class="language-plaintext highlighter-rouge">data.sql</code> dentro de <code class="language-plaintext highlighter-rouge">src/main/resources/data.sql</code>:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'Carlos Eduardo'</span><span class="p">,</span> <span class="s1">'(41) 99999-8888'</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="s1">'2023-03-15'</span><span class="p">,</span> <span class="mi">4500</span><span class="p">.</span><span class="mi">50</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'Ana Maria'</span><span class="p">,</span> <span class="s1">'(41) 98888-7777'</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">'2022-01-10'</span><span class="p">,</span> <span class="mi">5200</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'João Pedro'</span><span class="p">,</span> <span class="s1">'(41) 97777-6666'</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">'2024-05-20'</span><span class="p">,</span> <span class="mi">3100</span><span class="p">.</span><span class="mi">25</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'Mariana Silva'</span><span class="p">,</span> <span class="s1">'(41) 96666-5555'</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="s1">'2021-11-01'</span><span class="p">,</span> <span class="mi">6800</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">pessoa</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">telefone</span><span class="p">,</span> <span class="n">idade</span><span class="p">,</span> <span class="n">data_contrato</span><span class="p">,</span> <span class="n">salario</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'Lucas Santos'</span><span class="p">,</span> <span class="s1">'(41) 95555-4444'</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">'2025-02-14'</span><span class="p">,</span> <span class="mi">2900</span><span class="p">.</span><span class="mi">75</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="passo-5-criando-o-repositório-jpa">Passo 5: Criando o Repositório JPA</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── java
+            └── br
+                └── senai
+                    └── meuprojeto
+                        └── repositorio
+                            └── PessoaRepository.java  &lt;-- Criar pacote e interface aqui
+
+</code></pre></div></div>
+
+<p>Crie a interface <code class="language-plaintext highlighter-rouge">PessoaRepository.java</code> no pacote <code class="language-plaintext highlighter-rouge">br.senai.meuprojeto.repositorio</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.repositorio</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.senai.meuprojeto.modelo.Pessoa</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.JpaRepository</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Repository</span><span class="o">;</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PessoaRepository</span> <span class="kd">extends</span> <span class="nc">JpaRepository</span><span class="o">&lt;</span><span class="nc">Pessoa</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="construindo-as-operações-do-crud">Construindo as Operações do CRUD</h1>
+
+<p>Abaixo, cada endpoint será criado e testado no arquivo <code class="language-plaintext highlighter-rouge">PessoaController.java</code>:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meuprojeto
+└── src
+    └── main
+        └── java
+            └── br
+                └── senai
+                    └── meuprojeto
+                        └── controle
+                            └── PessoaController.java  &lt;-- Implementar os endpoints do CRUD
+
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="endpoint-1-alterando-getpessoa-para-listar-todas-as-pessoas">Endpoint 1: Alterando <code class="language-plaintext highlighter-rouge">getPessoa</code> para Listar Todas as Pessoas</h2>
+
+<h3 id="explicação-das-novas-anotações-e-métodos">Explicação das Novas Anotações e Métodos:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@Autowired</code>: Injeta automaticamente a instância gerenciada pelo Spring do <code class="language-plaintext highlighter-rouge">PessoaRepository</code> na variável.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.findAll()</code>: Método nativo do Spring Data JPA que executa uma consulta SQL (<code class="language-plaintext highlighter-rouge">SELECT * FROM pessoa</code>) e retorna uma lista com todos os registros cadastrados.</li>
+</ul>
+
+<h3 id="código-java-em-pessoacontrollerjava">Código Java em <code class="language-plaintext highlighter-rouge">PessoaController.java</code></h3>
+
+<p>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">br.senai.meuprojeto.controle</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.senai.meuprojeto.modelo.Pessoa</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.senai.meuprojeto.repositorio.PessoaRepository</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.*</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"pessoa"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PessoaController</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">PessoaRepository</span> <span class="n">pessoaRepository</span><span class="o">;</span>
+
+    <span class="c1">// Retorna a lista completa de pessoas do banco</span>
+    <span class="nd">@GetMapping</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Pessoa</span><span class="o">&gt;</span> <span class="nf">getPessoa</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">pessoaRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="-teste-no-navegador">🧪 Teste no Navegador:</h3>
+
+<p>Acesse no navegador: <a href="http://localhost:8080/pessoa">http://localhost:8080/pessoa</a></p>
+
+<hr />
+
+<h2 id="endpoint-2-criando-getpessoaporid">Endpoint 2: Criando <code class="language-plaintext highlighter-rouge">getPessoaPorId</code></h2>
+
+<h3 id="explicação-das-novas-anotações-e-métodos-1">Explicação das Novas Anotações e Métodos:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.findById(id)</code>: Busca um registro pelo ID no banco. Retorna um objeto <code class="language-plaintext highlighter-rouge">Optional&lt;Pessoa&gt;</code>, pois o registro pode não existir.</li>
+  <li><code class="language-plaintext highlighter-rouge">ResponseEntity.ok(...)</code>: Retorna uma resposta HTTP <code class="language-plaintext highlighter-rouge">200 OK</code> com o objeto localizado no corpo da resposta.</li>
+  <li><code class="language-plaintext highlighter-rouge">ResponseEntity.notFound().build()</code>: Retorna o status HTTP <code class="language-plaintext highlighter-rouge">404 Not Found</code> caso o registro não seja localizado.</li>
+</ul>
+
+<h3 id="código-java-para-adicionar-ao-pessoacontrollerjava">Código Java para adicionar ao <code class="language-plaintext highlighter-rouge">PessoaController.java</code></h3>
+
+<p>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Retorna uma pessoa específica através do ID</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"{id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">Pessoa</span><span class="o">&gt;</span> <span class="nf">getPessoaPorId</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">pessoaRepository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">pessoa</span> <span class="o">-&gt;</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">pessoa</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">orElse</span><span class="o">(</span><span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">notFound</span><span class="o">().</span><span class="na">build</span><span class="o">());</span>
+    <span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="-teste-no-navegador-1">🧪 Teste no Navegador:</h3>
+
+<p>Acesse no navegador: <a href="http://localhost:8080/pessoa/1">http://localhost:8080/pessoa/1</a></p>
+
+<hr />
+
+<h2 id="endpoint-3-criando-criapessoa-post">Endpoint 3: Criando <code class="language-plaintext highlighter-rouge">criaPessoa</code> (POST)</h2>
+
+<h3 id="explicação-das-novas-anotações-e-métodos-2">Explicação das Novas Anotações e Métodos:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@PostMapping</code>: Mapeia requisições HTTP do tipo <code class="language-plaintext highlighter-rouge">POST</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">@RequestBody</code>: Converte automaticamente o corpo do JSON enviado na requisição num objeto Java <code class="language-plaintext highlighter-rouge">Pessoa</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.save(pessoa)</code>: Salva a nova entidade no banco. Como a propriedade <code class="language-plaintext highlighter-rouge">id</code> é nula no momento do envio, o Hibernate executará um <code class="language-plaintext highlighter-rouge">INSERT</code> e retornará a pessoa com o <code class="language-plaintext highlighter-rouge">id</code> preenchido.</li>
+  <li><code class="language-plaintext highlighter-rouge">HttpStatus.CREATED</code>: Define o código de retorno HTTP <code class="language-plaintext highlighter-rouge">201 Created</code>.</li>
+</ul>
+
+<h3 id="código-java-para-adicionar-ao-pessoacontrollerjava-1">Código Java para adicionar ao <code class="language-plaintext highlighter-rouge">PessoaController.java</code></h3>
+
+<p>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@PostMapping</span>
+    <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="nc">HttpStatus</span><span class="o">.</span><span class="na">CREATED</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">Pessoa</span> <span class="nf">criaPessoa</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="nc">Pessoa</span> <span class="n">pessoa</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">pessoaRepository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">pessoa</span><span class="o">);</span>
+    <span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="-teste-via-console-powershell-do-idea">🧪 Teste via Console (PowerShell do IDEA):</h3>
+
+<p>Execute o seguinte comando no terminal PowerShell do IntelliJ IDEA para salvar uma nova pessoa:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">curl.exe</span><span class="w"> </span><span class="nt">-X</span><span class="w"> </span><span class="nx">POST</span><span class="w"> </span><span class="s2">"http://localhost:8080/pessoa"</span><span class="w"> </span><span class="nt">-H</span><span class="w"> </span><span class="s2">"Content-Type: application.json"</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="s1">'{\"nome\":\"Fernanda Lima\",\"telefone\":\"(41) 94444-3333\",\"idade\":29,\"dataContrato\":\"2026-06-01\",\"salario\":5500.00}'</span><span class="w">
+
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="endpoint-4-criando-alterapessoa-put">Endpoint 4: Criando <code class="language-plaintext highlighter-rouge">alteraPessoa</code> (PUT)</h2>
+
+<h3 id="explicação-das-novas-anotações-e-métodos-3">Explicação das Novas Anotações e Métodos:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@PutMapping("{id}")</code>: Mapeia requisições HTTP do tipo <code class="language-plaintext highlighter-rouge">PUT</code> com a inclusão da variável de caminho <code class="language-plaintext highlighter-rouge">{id}</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.existsById(id)</code>: Verifica se um registro com determinado ID já existe no banco.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoa.setId(id)</code>: Garante que o objeto recebido assuma o ID informado na URL antes de ser salvo.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.save(pessoa)</code>: Quando chamado com um objeto que já possui <code class="language-plaintext highlighter-rouge">id</code>, o Spring Data JPA executa uma instrução de atualização (<code class="language-plaintext highlighter-rouge">UPDATE</code>).</li>
+</ul>
+
+<h3 id="código-java-para-adicionar-ao-pessoacontrollerjava-2">Código Java para adicionar ao <code class="language-plaintext highlighter-rouge">PessoaController.java</code></h3>
+
+<p>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@PutMapping</span><span class="o">(</span><span class="s">"{id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">Pessoa</span><span class="o">&gt;</span> <span class="nf">alteraPessoa</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@RequestBody</span> <span class="nc">Pessoa</span> <span class="n">pessoa</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">pessoaRepository</span><span class="o">.</span><span class="na">existsById</span><span class="o">(</span><span class="n">id</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">notFound</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">pessoa</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="nc">Pessoa</span> <span class="n">pessoaAtualizada</span> <span class="o">=</span> <span class="n">pessoaRepository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">pessoa</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">pessoaAtualizada</span><span class="o">);</span>
+    <span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="-teste-via-console-powershell-do-idea-1">🧪 Teste via Console (PowerShell do IDEA):</h3>
+
+<p>Execute o seguinte comando no terminal para alterar os dados da pessoa de ID <code class="language-plaintext highlighter-rouge">1</code>:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">curl.exe</span><span class="w"> </span><span class="nt">-X</span><span class="w"> </span><span class="nx">PUT</span><span class="w"> </span><span class="s2">"http://localhost:8080/pessoa/1"</span><span class="w"> </span><span class="nt">-H</span><span class="w"> </span><span class="s2">"Content-Type: application.json"</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="s1">'{\"nome\":\"Carlos Eduardo Silva\",\"telefone\":\"(41) 99999-0000\",\"idade\":29,\"dataContrato\":\"2023-03-15\",\"salario\":5000.00}'</span><span class="w">
+
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="endpoint-5-criando-deletapessoa-delete">Endpoint 5: Criando <code class="language-plaintext highlighter-rouge">deletaPessoa</code> (DELETE)</h2>
+
+<h3 id="explicação-das-novas-anotações-e-métodos-4">Explicação das Novas Anotações e Métodos:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@DeleteMapping("{id}")</code>: Mapeia requisições HTTP do tipo <code class="language-plaintext highlighter-rouge">DELETE</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">pessoaRepository.deleteById(id)</code>: Exclui o registro correspondente ao ID informado diretamente do banco de dados (<code class="language-plaintext highlighter-rouge">DELETE FROM pessoa WHERE id = ?</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">ResponseEntity.noContent().build()</code>: Retorna a resposta com o código <code class="language-plaintext highlighter-rouge">204 No Content</code>, indicando sucesso no processamento sem retorno de conteúdo no corpo da resposta.</li>
+</ul>
+
+<h3 id="código-java-para-adicionar-ao-pessoacontrollerjava-3">Código Java para adicionar ao <code class="language-plaintext highlighter-rouge">PessoaController.java</code></h3>
+
+<p>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@DeleteMapping</span><span class="o">(</span><span class="s">"{id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;</span> <span class="nf">deletaPessoa</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">pessoaRepository</span><span class="o">.</span><span class="na">existsById</span><span class="o">(</span><span class="n">id</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">notFound</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">pessoaRepository</span><span class="o">.</span><span class="na">deleteById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">noContent</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="-teste-via-console-powershell-do-idea-2">🧪 Teste via Console (PowerShell do IDEA):</h3>
+
+<p>Execute o comando abaixo no terminal PowerShell para deletar a pessoa com ID <code class="language-plaintext highlighter-rouge">5</code>:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">curl.exe</span><span class="w"> </span><span class="nt">-X</span><span class="w"> </span><span class="nx">DELETE</span><span class="w"> </span><span class="s2">"http://localhost:8080/pessoa/5"</span><span class="w">
+
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="enviando-as-alterações-para-o-github">Enviando as Alterações para o GitHub</h2>
+
+<p>Após concluir a implementação e testes de todas as seções do CRUD, execute os comandos no terminal do IntelliJ IDEA para salvar no seu repositório remoto:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Tutorial 3 finalizado: Integracao com PostgreSQL e CRUD de Pessoa completo"</span>
+git push
+
+</code></pre></div></div>
