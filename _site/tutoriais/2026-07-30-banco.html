@@ -217,6 +217,21 @@
 
 </code></pre></div></div>
 
+<p>Você também vai precisar alterar o código em <code class="language-plaintext highlighter-rouge">controle.PessoaControler.java</code> para conseguir rodar (adicionar o valor <code class="language-plaintext highlighter-rouge">null</code> para o id):</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@GetMapping</span>
+    <span class="kd">public</span> <span class="nc">Pessoa</span> <span class="nf">getPessoa</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Instancia um objeto Pessoa populado com dados fictícios</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Pessoa</span><span class="o">(</span>
+                <span class="kc">null</span><span class="o">,</span>
+                <span class="s">"Carlos Eduardo"</span><span class="o">,</span>
+                <span class="s">"(41) 99999-8888"</span><span class="o">,</span>
+                <span class="mi">28</span><span class="o">,</span>
+                <span class="nc">LocalDate</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">2023</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">15</span><span class="o">),</span>
+                <span class="k">new</span> <span class="nf">BigDecimal</span><span class="o">(</span><span class="s">"4500.50"</span><span class="o">)</span>
+        <span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
 <h3 id="se-quiser-olhe-no-pgadmin">Se quiser, olhe no PGAdmin</h3>
 
 <p>Depois de alterar a classe Pessoa, você pode rodar o projeto e se ele rodar sem erros, vai criar a tabela pessoa no banco.</p>
