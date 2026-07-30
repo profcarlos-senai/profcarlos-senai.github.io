@@ -7,10 +7,9 @@ baseurl: ""
 theme: minima
 
 minima:
-  skin: classic 
+  skin: dark 
   header_pages:
     - index.md
     - about.md
-    - contact.md
   nav_pages:
     - index.md

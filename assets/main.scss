@@ -1,43 +1,32 @@
+---
+---
+{% if site.minima.skin == "dark" %}
 /* Dark skin overrides when `minima.skin: dark` */
 body {
   background-color: #0f1113 !important;
   color: #e6eef8 !important;
 }
-
 .site-header,
 .site-footer,
 .wrapper {
   background-color: transparent !important;
 }
-
 .site-header .site-title,
 .site-nav .page-link,
 .footer-heading,
 .contact-list li {
   color: #e6eef8 !important;
 }
-
-a {
-  color: #6ea8ff !important;
-}
-
-a:hover {
-  color: #bcd7ff !important;
-}
-
+a { color: #6ea8ff !important; }
+a:hover { color: #bcd7ff !important; }
 blockquote {
   color: #cfd8e3 !important;
   border-left-color: #2b2f33 !important;
 }
-
 .post-content pre, .highlight {
   background: #0b0c0d !important;
   color: #e6eef8 !important;
 }
-
 /* Improve contrast for code blocks */
-code {
-  color: #ffd27f !important;
-}
-
-/*# sourceMappingURL=main.css.map */
+code { color: #ffd27f !important; }
+{% endif %}
