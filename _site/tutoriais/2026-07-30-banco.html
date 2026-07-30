@@ -59,6 +59,8 @@
 
 </code></pre></div></div>
 
+<p>Depois de salvar o arquivo <code class="language-plaintext highlighter-rouge">pom.xml</code> você precisa clicar no botãozinho do maven (uma letra M com duas flechinhas que aparece acima e a direita). Isso vai baixar as dependências novas que você colocou.</p>
+
 <hr />
 
 <h2 id="passo-2-configurando-o-applicationproperties">Passo 2: Configurando o <code class="language-plaintext highlighter-rouge">application.properties</code></h2>
@@ -209,6 +211,12 @@
 <span class="o">}</span>
 
 </code></pre></div></div>
+
+<h3 id="se-quiser-olhe-no-pgadmin">Se quiser, olhe no PGAdmin</h3>
+
+<p>Depois de alterar a classe Pessoa, você pode rodar o projeto e se ele rodar sem erros, vai criar a tabela pessoa no banco.</p>
+
+<p>Acesse o PgAdmin4 e conecte ao servidor local, e agora deve existir uma tabela “Pessoas” dentro do banco <code class="language-plaintext highlighter-rouge">postgres</code>, dentro do schema <code class="language-plaintext highlighter-rouge">public</code>.</p>
 
 <hr />
 
