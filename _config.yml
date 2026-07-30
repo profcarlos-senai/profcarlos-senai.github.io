@@ -6,10 +6,5 @@ baseurl: ""
 
 theme: minima
 
-minima:
-  skin: dark 
-  header_pages:
-    - index.md
-    - about.md
-  nav_pages:
-    - index.md
+minima.skin: dark
+minima.nav_pages: [home, about]
